@@ -1,4 +1,4 @@
-# **Plugin Name** Plugin
+# **Discourse Topic Auto Delete** Plugin
 
 **Plugin Summary**
 

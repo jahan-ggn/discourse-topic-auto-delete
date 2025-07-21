@@ -1,4 +1,4 @@
-TODO_plugin_name:
-  plugin_name_enabled:
+discourse_topic_auto_delete:
+  discourse_topic_auto_delete_enabled:
     default: false
     client: true
