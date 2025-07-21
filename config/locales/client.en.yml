@@ -6,4 +6,9 @@ en:
           discourse_topic_auto_delete: "Discourse Topic Auto Delete"
   js:
     discourse_topic_auto_delete:
-      placeholder: placeholder
+      title: "Discourse Topic Auto Delete"
+      admin_navigation: "Discourse Topic Auto Delete"
+      topic:
+        auto-delete:
+          label: "Auto-delete topic after:"
+          validation_error: "Please select a valid auto-delete duration"

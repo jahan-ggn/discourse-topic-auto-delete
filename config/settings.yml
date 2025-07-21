@@ -1,4 +1,9 @@
-discourse_topic_auto_delete:
+plugins:
   discourse_topic_auto_delete_enabled:
     default: false
+    client: true
+
+  auto_delete_enabled_category_ids:
+    type: category_list
+    default: ""
     client: true

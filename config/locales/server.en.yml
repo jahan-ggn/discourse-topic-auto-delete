@@ -1,1 +1,4 @@
 en:
+  site_settings:
+    discourse_topic_auto_delete_enabled: "Enable topic auto delete"
+    auto_delete_enabled_category_ids: "Categories where you want to enable auto delete"
