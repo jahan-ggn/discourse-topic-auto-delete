@@ -42,8 +42,10 @@ export default class TopicAutoDeleteTimer extends Component {
   }
 
   get shouldRender() {
-    const categoryId = this.composer.model.category.id;
-    return this.allowedCategoryIds.includes(categoryId);
+    const model = this.composer.model;
+    const categoryId = model?.category?.id;
+
+    return categoryId && this.allowedCategoryIds.includes(categoryId);
   }
 
   @action
