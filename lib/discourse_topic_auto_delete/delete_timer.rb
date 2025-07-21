@@ -3,7 +3,7 @@
 module DiscourseTopicAutoDelete
   class DeleteTimer
     def self.set_for(topic, user)
-      return unless topic.present?
+      return if topic.blank?
       return unless user&.staff? || user&.id == topic.user_id
 
       allowed_ids = SiteSetting.auto_delete_enabled_category_ids.to_s.split("|").map(&:to_i)
