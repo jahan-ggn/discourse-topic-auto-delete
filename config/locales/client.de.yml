@@ -1,4 +1,4 @@
-en:
+de:
   admin_js:
     admin:
       site_settings:
@@ -10,5 +10,5 @@ en:
       admin_navigation: "Discourse Topic Auto Delete"
       topic:
         auto-delete:
-          label: "Valid for:"
-          validation_error: "Invalid input"
+          label: "Gültig für:"
+          validation_error: "Ungültige Eingabe"
