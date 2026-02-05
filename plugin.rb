@@ -25,7 +25,7 @@ after_initialize do
 
   register_topic_custom_field_type(
     TopicAutoDeleteField::FIELD_NAME,
-    TopicAutoDeleteField::FIELD_TYPE
+    TopicAutoDeleteField::FIELD_TYPE,
   )
 
   add_to_class(:topic, TopicAutoDeleteField::FIELD_NAME.to_sym) do
@@ -43,6 +43,7 @@ after_initialize do
     if duration.present? && allowed_ids.include?(topic.category_id)
       topic.send("#{TopicAutoDeleteField::FIELD_NAME}=", duration)
       topic.save!
+      ::DiscourseTopicAutoDelete::DeleteTimer.set_for(topic, user)
     else
       topic.custom_fields.delete(TopicAutoDeleteField::FIELD_NAME)
       topic.save_custom_fields
@@ -50,15 +51,15 @@ after_initialize do
   end
 
   PostRevisor.track_topic_field(TopicAutoDeleteField::FIELD_NAME.to_sym) do |tc, value|
-    tc.record_change(
-      TopicAutoDeleteField::FIELD_NAME,
-      tc.topic.send(TopicAutoDeleteField::FIELD_NAME),
-      value
-    )
-    tc.topic.send(
-      "#{TopicAutoDeleteField::FIELD_NAME}=",
-      value.present? ? value : nil
-    )
+    old_value = tc.topic.send(TopicAutoDeleteField::FIELD_NAME)
+
+    tc.record_change(TopicAutoDeleteField::FIELD_NAME, old_value, value)
+    tc.topic.send("#{TopicAutoDeleteField::FIELD_NAME}=", value.present? ? value : nil)
+
+    if old_value != value && SiteSetting.discourse_topic_auto_delete_enabled
+      tc.topic.save_custom_fields # Save BEFORE calling DeleteTimer
+      ::DiscourseTopicAutoDelete::DeleteTimer.set_for(tc.topic, tc.user)
+    end
   end
 
   add_to_serializer(:topic_view, TopicAutoDeleteField::FIELD_NAME.to_sym) do
@@ -66,23 +67,4 @@ after_initialize do
   end
 
   add_preloaded_topic_list_custom_field(TopicAutoDeleteField::FIELD_NAME)
-
-  on(:post_created) do |post, _, user|
-    if SiteSetting.discourse_topic_auto_delete_enabled && post.topic
-      ::DiscourseTopicAutoDelete::DeleteTimer.set_for(post.topic, user)
-    end
-  end
-
-  on(:post_edited) do |post, _, revisor|
-    if SiteSetting.discourse_topic_auto_delete_enabled && post.topic
-      editor = revisor.instance_variable_get(:@editor)
-      ::DiscourseTopicAutoDelete::DeleteTimer.set_for(post.topic, editor)
-    end
-  end
-
-  on(:topic_edited) do |topic, _topic_changes, user|
-    if SiteSetting.discourse_topic_auto_delete_enabled
-      ::DiscourseTopicAutoDelete::DeleteTimer.set_for(topic, user)
-    end
-  end
 end

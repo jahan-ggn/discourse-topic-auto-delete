@@ -5,4 +5,6 @@ DiscourseTopicAutoDelete::Engine.routes.draw do
   # define routes here
 end
 
-Discourse::Application.routes.draw { mount ::DiscourseTopicAutoDelete::Engine, at: "discourse-topic-auto-delete" }
+Discourse::Application.routes.draw do
+  mount ::DiscourseTopicAutoDelete::Engine, at: "discourse-topic-auto-delete"
+end

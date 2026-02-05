@@ -47,7 +47,21 @@ export default class TopicAutoDeleteTimer extends Component {
     const model = this.composer.model;
     const categoryId = model?.category?.id;
 
-    return categoryId && this.allowedCategoryIds.includes(categoryId);
+    if (!categoryId || !this.allowedCategoryIds.includes(categoryId)) {
+      return false;
+    }
+
+    // New topic
+    if (model.action === "createTopic") {
+      return true;
+    }
+
+    // Editing the first post
+    if (model.action === "edit" && model.post?.post_number === 1) {
+      return true;
+    }
+
+    return false;
   }
 
   @action

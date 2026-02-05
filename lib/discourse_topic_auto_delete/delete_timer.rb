@@ -23,10 +23,7 @@ module DiscourseTopicAutoDelete
 
       return if duration_minutes.blank?
 
-      options = {
-        by_user: user,
-        duration_minutes: duration_minutes.to_i
-      }
+      options = { by_user: user, duration_minutes: duration_minutes.to_i }
 
       time = (Time.zone.now + duration_minutes.to_i.minutes).strftime("%Y-%m-%d %H:%M:%S")
 
