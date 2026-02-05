@@ -14,7 +14,9 @@ export default class TopicAutoDeleteTimer extends Component {
 
   didReceiveAttrs() {
     super.didReceiveAttrs(...arguments);
-    this.set("auto_delete_after_minutes", this.durationMinutes);
+    if (this.shouldRender) {
+      this.set("auto_delete_after_minutes", this.durationMinutes);
+    }
   }
 
   @discourseComputed("auto_delete_after_minutes", "composer.lastValidatedAt")

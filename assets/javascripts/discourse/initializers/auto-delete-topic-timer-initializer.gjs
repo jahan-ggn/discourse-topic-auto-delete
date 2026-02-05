@@ -16,7 +16,7 @@ export default apiInitializer((api) => {
   api.registerValueTransformer(
     "composer-service-cannot-submit-post",
     ({ context: { model } }) => {
-      const categoryId = model.topic?.category_id;
+      const categoryId = model?.category.id;
 
       if (!enabledCategoryIds.includes(categoryId)) {
         return false;
